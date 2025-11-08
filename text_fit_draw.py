@@ -1,6 +1,6 @@
 # filename: text_fit_draw.py
 from io import BytesIO
-from typing import Tuple, Union, Literal
+from typing import Tuple, Union, Literal , Optional ,List
 from PIL import Image, ImageDraw, ImageFont
 import os
 
@@ -13,13 +13,13 @@ def draw_text_auto(
     bottom_right: Tuple[int, int],
     text: str,
     color: Tuple[int, int, int] = (0, 0, 0),
-    max_font_height: int | None = None,
-    font_path: str | None = None,
+    max_font_height: Optional[int] = None,
+    font_path: Optional[str] = None,
     align: Align = "center",
     valign: VAlign = "middle",
     line_spacing: float = 0.15,
     bracket_color: Tuple[int, int, int] = (128, 0, 128),  # 中括号及内部内容颜色
-    image_overlay: Union[str, Image.Image,None]=None,
+    image_overlay: Union[str, Image.Image, None]=None,
 ) -> bytes:
     """
     在指定矩形内自适应字号绘制文本；
@@ -55,7 +55,7 @@ def draw_text_auto(
             return ImageFont.load_default()
 
     # --- 3. 文本包行 ---
-    def wrap_lines(txt: str, font: ImageFont.FreeTypeFont, max_w: int) -> list[str]:
+    def wrap_lines(txt: str, font: ImageFont.FreeTypeFont, max_w: int) -> List[str]:
         lines: list[str] = []
         for para in txt.splitlines() or [""]:
             has_space = (" " in para)
@@ -98,7 +98,7 @@ def draw_text_auto(
         return lines
 
     # --- 4. 测量 ---
-    def measure_block(lines: list[str], font: ImageFont.FreeTypeFont) -> tuple[int, int, int]:
+    def measure_block(lines: List[str], font: ImageFont.FreeTypeFont) -> Tuple[int, int, int]:
         ascent, descent = font.getmetrics()
         line_h = int((ascent + descent) * (1 + line_spacing))
         max_w = 0
@@ -131,7 +131,7 @@ def draw_text_auto(
         font = _load_font(best_size)
 
     # --- 6. 解析着色片段 ---
-    def parse_color_segments(s: str,in_bracket: bool) -> Tuple[list[tuple[str, Tuple[int, int, int]]],bool]:
+    def parse_color_segments(s: str,in_bracket: bool) -> Tuple[List[Tuple[str, Tuple[int, int, int]]],bool]:
         segs: list[tuple[str, Tuple[int, int, int]]] = []
         buf = ""
         for ch in s:

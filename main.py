@@ -5,7 +5,7 @@ import pyperclip
 import io
 from PIL import Image
 import win32clipboard
-
+from typing import Optional
 from config import DELAY, FONT_FILE, BASEIMAGE_FILE, AUTO_SEND_IMAGE, AUTO_PASTE_IMAGE, BLOCK_HOTKEY, HOTKEY, SEND_HOTKEY,PASTE_HOTKEY,CUT_HOTKEY,SELECT_ALL_HOTKEY,TEXT_BOX_TOPLEFT,IMAGE_BOX_BOTTOMRIGHT,BASE_OVERLAY_FILE,USE_BASE_OVERLAY
 
 from text_fit_draw import draw_text_auto
@@ -47,7 +47,7 @@ def cut_all_and_get_text() -> str:
 
     return new_clip
 
-def try_get_image() -> Image.Image | None:
+def try_get_image() -> Optional[Image.Image]:
     """
     尝试从剪贴板获取图像，如果没有图像则返回 None。
     仅支持 Windows。
